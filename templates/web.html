@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🍓 Nhận diện trái cây bằng YOLO</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f9f9f9;
+      padding: 1.5rem;
+    }
+
+    video, img {
+      max-width: 100%;
+      width: 320px;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+
+    button {
+      margin: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+
+    #result img {
+      border: 2px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h2>🍎 Nhận diện trái cây bằng YOLO (Camera)</h2>
+
+  <video id="video" autoplay playsinline></video><br/>
+  <button id="toggle">🔄 Đổi camera</button>
+  <button id="snap">📷 Nhận diện</button>
+
+  <div id="result"></div>
+
+  <script>
+    let video = document.getElementById('video');
+    let usingFront = false;
+    let currentStream;
+
+    async function startCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+
+      const constraints = {
+        video: {
+          facingMode: usingFront ? "user" : "environment"
+        },
+        audio: false
+      };
+
+      currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = currentStream;
+    }
+
+    document.getElementById('toggle').onclick = () => {
+      usingFront = !usingFront;
+      startCamera();
+    };
+
+    document.getElementById('snap').onclick = async () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
+      const formData = new FormData();
+      formData.append('image', blob, 'capture.jpg');
+
+      const res = await fetch('/detect', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      document.getElementById('result').innerHTML = `
+        <h3>Kết quả:</h3>
+        <img src="${data.result_url}" alt="Kết quả nhận diện" />
+      `;
+    };
+
+    startCamera();
+  </script>
+</body>
+</html>
