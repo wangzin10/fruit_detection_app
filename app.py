@@ -6,10 +6,14 @@ import os
 from PIL import Image
 from time import time
 import io
+import tensorflow as tf
+
+
+#model yolo
+model_yolo = YOLO("d:\HK_personal project\project_2_FruitDetection\model\fruit_detection_model.h5")  
 
 app = Flask(__name__)
 
-model = YOLO("D:/HK_personal project/project_2_FruitDetection/model/best.pt")  
 
 @app.route('/')
 def index():
@@ -21,14 +25,14 @@ def detect():
     image = Image.open(file.stream).convert("RGB")
     image_np = np.array(image)
 
-    results = model(image_np)[0]
+    results = model_yolo(image_np)[0]
 
     # Vẽ box
     for box in results.boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0])
         conf = float(box.conf)
         label = int(box.cls)
-        class_name = model.names[label]
+        class_name = model_yolo.names[label]
 
         cv2.rectangle(image_np, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(image_np, f"{class_name} {conf:.2f}", (x1, y1 - 10),
