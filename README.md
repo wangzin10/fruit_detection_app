@@ -72,16 +72,18 @@ yolo detect train \
 ```
 Evaluation on the test set (60 images) shows:
 
-<img src="https://github.com/user-attachments/assets/e22b49c7-8da1-448e-ad11-787a066e3cb0" width="400" />
+<img src="https://github.com/user-attachments/assets/f46d43cd-03f8-4ba0-90f0-82d59af02617" width="500" />
 
 
 Here is the detailed per-class evaluation result:
 
-<img src="https://github.com/user-attachments/assets/e22b49c7-8da1-448e-ad11-787a066e3cb0" width="400" />
+<img src="https://github.com/user-attachments/assets/00538060-4365-48ff-89e9-76531bcbd1e5" width="700" />
+
 
 confusion matrix:
 
-<img src="https://github.com/user-attachments/assets/e22b49c7-8da1-448e-ad11-787a066e3cb0" width="400" />
+<img src="https://github.com/user-attachments/assets/feccb0c0-03c8-41d0-9bb4-2c2d7198dfe6" width="500" />
+
 
 
 ---
@@ -103,7 +105,7 @@ Then open your browser and go to:
 ## Model Demo
 
 <p align="center">
-  <img src="static/result.jpg" width="500"/>
+  <img src="https://github.com/user-attachments/assets/7d39bc0b-6cb7-420e-b8bd-3bd3356a618b" width="700" />
 </p>
 
 
